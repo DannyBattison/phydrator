@@ -26,7 +26,7 @@ abstract class AbstractHydrator
         }
     }
 
-    public function hydrateOne(array $data): object
+    public function hydrateOne($data): object
     {
         $entityClass = static::ENTITY_CLASS;
         $entity = new $entityClass();
@@ -43,7 +43,7 @@ abstract class AbstractHydrator
         return $entity;
     }
 
-    public function hydrateMany(array $data): array
+    public function hydrateMany($data): array
     {
         return array_map(function(array $element) {
             return $this->hydrateOne($element);

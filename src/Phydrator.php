@@ -4,11 +4,12 @@ namespace Phydrator;
 
 use Phydrator\Exception\HydratorDoesNotExistException;
 use ReflectionClass;
+use ReflectionException;
 
 class Phydrator
 {
     /** @var AbstractHydrator[] */
-    private array $hydratorMap;
+    public array $hydratorMap;
 
     public function __construct()
     {
@@ -20,10 +21,7 @@ class Phydrator
         $this->hydratorMap = [];
 
         foreach($filteredClassNames as $className) {
-            try {
-                $reflectionClass = new ReflectionClass($className);
-                $this->hydratorMap[$reflectionClass->getConstant('ENTITY_CLASS')] = $className;
-            } catch (\ReflectionException $e) { }
+            $this->registerHydrator($className);
         }
     }
 
@@ -58,5 +56,13 @@ class Phydrator
         }
 
         return $this->hydratorMap[$className];
+    }
+
+    public function registerHydrator(string $className): void
+    {
+        try {
+            $reflectionClass = new ReflectionClass($className);
+            $this->hydratorMap[$reflectionClass->getConstant('ENTITY_CLASS')] = $className;
+        } catch (ReflectionException $e) { }
     }
 }
