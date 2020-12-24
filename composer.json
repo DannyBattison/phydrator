@@ -1,0 +1,18 @@
+{
+    "name": "dannyb/phydrator",
+    "description": "PHP entity hydration",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Danny Battison",
+            "email": "captain@danny.gg"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Phydrator\\": "src"
+        }
+    }
+}
