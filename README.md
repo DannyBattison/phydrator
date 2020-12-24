@@ -11,7 +11,7 @@ namespace PHydrator\Hydrator;
 
 use PHydrator\AbstractHydrator;
 
-class SimpleHydrator extends AbstractHydrator
+class MyHydrator extends AbstractHydrator
 {
     protected const ENTITY_CLASS = MyEntity::class;
 }
@@ -25,6 +25,6 @@ As a result, you should register your hydrators in your application:
 
 ```php
 $pHydrator = new PHydrator();
-$pHydrator->registerHydrator(SomeHydrator::class);
+$pHydrator->registerHydrator(MyHydrator::class);
 // ...
 ```
