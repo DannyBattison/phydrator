@@ -2,29 +2,40 @@
 
 namespace Phydrator;
 
+use ReflectionClass;
 use TypeError;
 
 abstract class AbstractHydrator
 {
     protected const ENTITY_CLASS = '';
 
-    private HydratorRepository $hydratorRepository;
+    private Phydrator $phydrator;
 
-    public function __construct(HydratorRepository $hydratorRepository)
+    /** @var string[] */
+    private array $propTypes = [];
+
+    public function __construct(Phydrator $phydrator)
     {
-        $this->hydratorRepository = $hydratorRepository;
+        $this->phydrator = $phydrator;
+
+        $reflectionClass = new ReflectionClass(static::ENTITY_CLASS);
+        $props = $reflectionClass->getProperties();
+
+        foreach ($props as $prop) {
+            $this->propTypes[$prop->getName()] = $prop->getType()->getName();
+        }
     }
 
-    public function hydrateOne(object $data): object
+    public function hydrateOne(array $data): object
     {
         $entityClass = static::ENTITY_CLASS;
         $entity = new $entityClass();
 
         foreach ($data as $key => $val) {
             try {
-                if (property_exists(static::$entityClass, $key)) {
-                    var_dump(gettype($entity->$key));exit;
-                    $entity->$key = $val;
+                if (!empty($this->propTypes[$key])) {
+                    $hydrator = $this->phydrator->getHydrator($this->propTypes[$key]);
+                    $entity->$key = $hydrator ? $hydrator->hydrateOne($val) : $val;
                 }
             } catch (TypeError $e) { }
         }
@@ -34,7 +45,7 @@ abstract class AbstractHydrator
 
     public function hydrateMany(array $data): array
     {
-        return array_map(function(object $element) {
+        return array_map(function(array $element) {
             return $this->hydrateOne($element);
         }, $data);
     }
