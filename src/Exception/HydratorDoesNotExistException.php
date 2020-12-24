@@ -1,6 +1,6 @@
 <?php
 
-namespace Phydrator\Exception;
+namespace PHydrator\Exception;
 
 use Exception;
 

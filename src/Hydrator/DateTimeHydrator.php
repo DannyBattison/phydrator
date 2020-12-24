@@ -1,9 +1,9 @@
 <?php
 
-namespace Phydrator\Hydrator;
+namespace PHydrator\Hydrator;
 
 use DateTime;
-use Phydrator\AbstractHydrator;
+use PHydrator\AbstractHydrator;
 
 class DateTimeHydrator extends AbstractHydrator
 {

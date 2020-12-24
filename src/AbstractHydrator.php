@@ -1,6 +1,6 @@
 <?php
 
-namespace Phydrator;
+namespace PHydrator;
 
 use ReflectionClass;
 use TypeError;
@@ -9,14 +9,14 @@ abstract class AbstractHydrator
 {
     protected const ENTITY_CLASS = '';
 
-    private Phydrator $phydrator;
+    private PHydrator $pHydrator;
 
     /** @var string[] */
     private array $propTypes = [];
 
-    public function __construct(Phydrator $phydrator)
+    public function __construct(PHydrator $pHydrator)
     {
-        $this->phydrator = $phydrator;
+        $this->pHydrator = $pHydrator;
 
         $reflectionClass = new ReflectionClass(static::ENTITY_CLASS);
         $props = $reflectionClass->getProperties();
@@ -34,7 +34,7 @@ abstract class AbstractHydrator
         foreach ($data as $key => $val) {
             try {
                 if (!empty($this->propTypes[$key])) {
-                    $hydrator = $this->phydrator->getHydrator($this->propTypes[$key]);
+                    $hydrator = $this->pHydrator->getHydrator($this->propTypes[$key]);
                     $entity->$key = $hydrator ? $hydrator->hydrateOne($val) : $val;
                 }
             } catch (TypeError $e) { }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Phydrator;
+namespace PHydrator;
 
-use Phydrator\Exception\HydratorDoesNotExistException;
+use PHydrator\Exception\HydratorDoesNotExistException;
 use ReflectionClass;
 use ReflectionException;
 
-class Phydrator
+class PHydrator
 {
     /** @var AbstractHydrator[] */
     public array $hydratorMap;
