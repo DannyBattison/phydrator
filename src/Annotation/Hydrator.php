@@ -1,6 +1,6 @@
 <?php
 
-namespace Phydrator\Annotation;
+namespace PHydrator\Annotation;
 
 /**
  * @Annotation
