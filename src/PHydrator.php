@@ -14,7 +14,7 @@ class PHydrator
     public function __construct()
     {
         $classNames = get_declared_classes();
-        $filteredClassNames = array_filter($classNames, function(string $className) {
+        $filteredClassNames = array_filter($classNames, static function(string $className) {
             return is_subclass_of($className, AbstractHydrator::class);
         });
 
