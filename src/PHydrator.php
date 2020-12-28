@@ -2,6 +2,7 @@
 
 namespace PHydrator;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use PHydrator\Exception\HydratorDoesNotExistException;
 use ReflectionClass;
 use ReflectionException;
@@ -10,6 +11,8 @@ class PHydrator
 {
     /** @var AbstractHydrator[] */
     public array $hydratorMap;
+
+    private ?AnnotationReader $annotationReader = null;
 
     public function __construct()
     {
@@ -64,5 +67,14 @@ class PHydrator
             $reflectionClass = new ReflectionClass($className);
             $this->hydratorMap[$reflectionClass->getConstant('ENTITY_CLASS')] = $className;
         } catch (ReflectionException $e) { }
+    }
+
+    public function getAnnotationReader(): AnnotationReader
+    {
+        if (!$this->annotationReader instanceof AnnotationReader) {
+            $this->annotationReader = new AnnotationReader();
+        }
+
+        return $this->annotationReader;
     }
 }
