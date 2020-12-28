@@ -2,8 +2,7 @@
 
 namespace PHydrator;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Phydrator\Annotation\Hydrator;
+use PHydrator\Annotation\Hydrator;
 use ReflectionClass;
 use TypeError;
 
