@@ -2,6 +2,11 @@
     "name": "dannyb/phydrator",
     "description": "PHP entity hydration",
     "type": "library",
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    },
     "authors": [
         {
             "name": "Danny Battison",
