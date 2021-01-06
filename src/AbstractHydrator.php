@@ -4,6 +4,7 @@ namespace PHydrator;
 
 use PHydrator\Annotation\Hydrator;
 use ReflectionClass;
+use ReflectionType;
 use TypeError;
 
 abstract class AbstractHydrator
@@ -23,18 +24,24 @@ abstract class AbstractHydrator
         $props = $reflectionClass->getProperties();
 
         foreach ($props as $prop) {
-            $type = $prop->getType()->getName();
+            $type = $prop->getType();
+            if (!$type instanceof ReflectionType) {
+                continue;
+            }
+            $typeName = $prop->getType()->getName();
             $annotation = $this->pHydrator
                 ->getAnnotationReader()
                 ->getPropertyAnnotation($prop, Hydrator::class);
 
             if ($annotation instanceof Hydrator) {
+                $annotation->nullable = $type->allowsNull();
                 $this->propertyHydrators[$prop->getName()] = $annotation;
                 continue;
             }
 
             $this->propertyHydrators[$prop->getName()] = new Hydrator([
-                'entityClass' => $type,
+                'entityClass' => $typeName,
+                'nullable' => $type->allowsNull(),
             ]);
         }
     }
@@ -43,6 +50,12 @@ abstract class AbstractHydrator
     {
         $entityClass = static::ENTITY_CLASS;
         $entity = new $entityClass();
+
+        foreach ($this->propertyHydrators as $property => $hydrator) {
+            if ($hydrator->nullable) {
+                $entity->$property = null;
+            }
+        }
 
         foreach ($data as $key => $val) {
             try {

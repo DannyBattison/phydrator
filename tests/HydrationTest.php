@@ -4,8 +4,10 @@ use PHPUnit\Framework\TestCase;
 use PHydrator\PHydrator;
 use PHydrator\Tests\Resource\Entity\Cat;
 use PHydrator\Tests\Resource\Entity\Person;
+use PHydrator\Tests\Resource\Entity\WithNullableProperties;
 use PHydrator\Tests\Resource\Hydrator\CatHydrator;
 use PHydrator\Tests\Resource\Hydrator\PersonHydrator;
+use PHydrator\Tests\Resource\Hydrator\WithNullablePropertiesHydrator;
 
 final class HydrationTest extends TestCase
 {
@@ -16,6 +18,7 @@ final class HydrationTest extends TestCase
         $this->pHydrator = new PHydrator();
         $this->pHydrator->registerHydrator(PersonHydrator::class);
         $this->pHydrator->registerHydrator(CatHydrator::class);
+        $this->pHydrator->registerHydrator(WithNullablePropertiesHydrator::class);
     }
 
     public function testHydrateOne()
@@ -43,5 +46,16 @@ final class HydrationTest extends TestCase
         foreach ($danny->cats as $cat) {
             self::assertInstanceOf(Cat::class, $cat);
         }
+    }
+
+    public function testHydrateNull()
+    {
+        $withNullableProperties = $this->pHydrator->hydrateOne(
+            WithNullableProperties::class,
+            ['foo' => 'hello world!']
+        );
+
+        self::assertInstanceOf(WithNullableProperties::class, $withNullableProperties);
+        self::assertNull($withNullableProperties->bar);
     }
 }
