@@ -6,7 +6,7 @@ use \PHydrator\Annotation\Hydrator;
 
 class Person
 {
-    public string $class;
+    public string $name;
 
     /**
      * @var Cat[]
