@@ -76,12 +76,14 @@ class PHydrator
 
     private function autoloadHydrators(): void
     {
+    	if (!$this->config->autoloadNamespace) {
+    		return;
+	    }
+
 	    try {
-		    $classNames = $this->config->autoloadNamespace ?
-			    ClassFinder::getClassesInNamespace($this->config->autoloadNamespace) :
-			    get_declared_classes();
+		    $classNames = ClassFinder::getClassesInNamespace($this->config->autoloadNamespace);
 	    } catch (Exception $e) {
-		    $classNames = get_declared_classes();
+	    	return;
 	    }
 
 	    $filteredClassNames = array_filter($classNames, static function(string $className) {
