@@ -26,7 +26,7 @@ use PHydrator\Config;
 use PHydrator\PHydrator;
 // ...
 $config = new Config();
-$config->autoloadNamespace = "\\App\\Hydrators";
+$config->autoloadNamespace = "App\\Hydrators";
 $pHydrator = new PHydrator($config);
 // ...
 ```
