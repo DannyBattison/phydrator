@@ -2,6 +2,7 @@
     "name": "dannyb/phydrator",
     "description": "PHP entity hydration",
     "type": "library",
+    "license": "MIT",
     "config": {
         "platform": {
             "php": "7.4"
