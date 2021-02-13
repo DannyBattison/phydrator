@@ -17,13 +17,27 @@ class MyHydrator extends AbstractHydrator
 }
 ```
 
-## Quirks
+## Autoloading Hydrators
 
-The library will attempt to automatically register any hydrators using `get_declared_classes`.  However, if you're using autoloading (or even just loading the class before your hydrators), they won't be registered.
-
-As a result, you should register your hydrators in your application:
+The recommended method of registering hydrators is to specify a namespace in the config when initialising PHydrator:
 
 ```php
+use PHydrator\Config;
+use PHydrator\PHydrator;
+// ...
+$config = new Config();
+$config->autoloadNamespace = "\\App\\Hydrators";
+$pHydrator = new PHydrator($config);
+// ...
+```
+
+If an autoload namespace isn't specified, you will need to manually register your hydrators.
+
+Note that this is also an option if you have hydrators in other namespaces.
+
+```php
+use PHydrator\PHydrator;
+// ...
 $pHydrator = new PHydrator();
 $pHydrator->registerHydrator(MyHydrator::class);
 // ...
