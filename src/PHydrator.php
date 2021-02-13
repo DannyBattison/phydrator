@@ -3,6 +3,8 @@
 namespace PHydrator;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Exception;
+use HaydenPierce\ClassFinder\ClassFinder;
 use PHydrator\Exception\HydratorDoesNotExistException;
 use ReflectionClass;
 use ReflectionException;
@@ -10,22 +12,16 @@ use ReflectionException;
 class PHydrator
 {
     /** @var AbstractHydrator[] */
-    public array $hydratorMap;
+    public array $hydratorMap = [];
 
+	private Config $config;
     private ?AnnotationReader $annotationReader = null;
 
-    public function __construct()
+    public function __construct(?Config $config)
     {
-        $classNames = get_declared_classes();
-        $filteredClassNames = array_filter($classNames, static function(string $className) {
-            return is_subclass_of($className, AbstractHydrator::class);
-        });
+		$this->config = $config ?? new Config();
 
-        $this->hydratorMap = [];
-
-        foreach($filteredClassNames as $className) {
-            $this->registerHydrator($className);
-        }
+		$this->autoloadHydrators();
     }
 
     public function hydrateOne(string $className, array $data): object
@@ -76,5 +72,24 @@ class PHydrator
         }
 
         return $this->annotationReader;
+    }
+
+    private function autoloadHydrators(): void
+    {
+	    try {
+		    $classNames = $this->config->autoloadNamespace ?
+			    ClassFinder::getClassesInNamespace($this->config->autoloadNamespace) :
+			    get_declared_classes();
+	    } catch (Exception $e) {
+		    $classNames = get_declared_classes();
+	    }
+
+	    $filteredClassNames = array_filter($classNames, static function(string $className) {
+		    return is_subclass_of($className, AbstractHydrator::class);
+	    });
+
+	    foreach($filteredClassNames as $className) {
+		    $this->registerHydrator($className);
+	    }
     }
 }

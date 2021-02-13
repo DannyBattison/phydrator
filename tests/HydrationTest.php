@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHydrator\Config;
 use PHydrator\PHydrator;
 use PHydrator\Tests\Resource\Entity\Cat;
 use PHydrator\Tests\Resource\Entity\Person;
@@ -15,10 +16,9 @@ final class HydrationTest extends TestCase
 
     public function setUp(): void
     {
-        $this->pHydrator = new PHydrator();
-        $this->pHydrator->registerHydrator(PersonHydrator::class);
-        $this->pHydrator->registerHydrator(CatHydrator::class);
-        $this->pHydrator->registerHydrator(WithNullablePropertiesHydrator::class);
+    	$pHydratorConfig = new Config();
+    	$pHydratorConfig->autoloadNamespace = "PHydrator\\Tests\\Resource\\Hydrator";
+        $this->pHydrator = new PHydrator($pHydratorConfig);
     }
 
     public function testHydrateOne()
