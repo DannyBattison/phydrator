@@ -6,9 +6,6 @@ use PHydrator\PHydrator;
 use PHydrator\Tests\Resource\Entity\Cat;
 use PHydrator\Tests\Resource\Entity\Person;
 use PHydrator\Tests\Resource\Entity\WithNullableProperties;
-use PHydrator\Tests\Resource\Hydrator\CatHydrator;
-use PHydrator\Tests\Resource\Hydrator\PersonHydrator;
-use PHydrator\Tests\Resource\Hydrator\WithNullablePropertiesHydrator;
 
 final class HydrationTest extends TestCase
 {
